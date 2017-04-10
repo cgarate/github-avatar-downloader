@@ -20,7 +20,7 @@ getRepoContributors = function (repoOwner, repoName, cb) {
     if (err) throw err;
     if (response.statusCode == 200) {
       //console.log(cb(err, body));
-      contributors = JSON.parse(body);
+      var contributors = JSON.parse(body);
       cb(err, contributors);
     }
 
@@ -28,7 +28,10 @@ getRepoContributors = function (repoOwner, repoName, cb) {
 }
 
 getRepoContributors("jquery", "jquery", function(err, result) {
-  console.log(contributors);
+  console.log(result);
+  for (user in result) {
+    console.log(result[user].avatar_url);
+  }
 });
 
 // module.exports = {
