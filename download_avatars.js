@@ -18,18 +18,17 @@ getRepoContributors = function (repoOwner, repoName, cb) {
 
   request(options, function(err, response, body) {
     if (err) throw err;
-    //console.log('Response Status Code:', response.statusCode);
-
-    //if (response.statusCode === 200) {
-      console.log(cb(body));
-    //}
+    if (response.statusCode == 200) {
+      //console.log(cb(err, body));
+      contributors = JSON.parse(body);
+      cb(err, contributors);
+    }
 
   });
 }
 
 getRepoContributors("jquery", "jquery", function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
+  console.log(contributors);
 });
 
 // module.exports = {
