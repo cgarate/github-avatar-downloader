@@ -51,11 +51,10 @@ function downloadImageByURL(url, filePath) {
 
 // The call to the main function including the callback function.
 getRepoContributors("jquery", "jquery", function(err, result) {
-  //console.log(result);
+
   for (user in result) {
     filePath = "avatars/" + result[user].login + ".png" ;
     downloadImageByURL(result[user].avatar_url, filePath);
-    //console.log(result[user].avatar_url, filePath);
   }
 });
 
