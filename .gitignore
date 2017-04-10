@@ -1,3 +1,6 @@
+# Avatar Image files
+/avatars
+
 # Logs
 logs
 *.log
