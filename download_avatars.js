@@ -7,15 +7,19 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 
 // Needed to connect to the API
 var GITHUB_USER = "cgarate";
-var GITHUB_TOKEN = "a39fe022b7ae6391b7869a740e672aaae22c62d5"
+
+var args = process.argv;
+var argRepoOwner = args[2];
+var argRepoName = args[3];
+var argToken = args[4];
 
 // The main function. Creates a request to the github API to get a list of contributors' info of a specific repository.
-var getRepoContributors = function (repoOwner, repoName, cb) {
+var getRepoContributors = function (repoOwner, repoName, cb, APItoken) {
 
   // We need to set a custom User-Agent so we pass the options object to the request function.
   var options = {
     //url: 'https://api.github.com/repos/request/request',
-    url: `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
+    url: `https://${GITHUB_USER}:${APItoken}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
       'User-Agent': 'request'
     }
@@ -23,6 +27,7 @@ var getRepoContributors = function (repoOwner, repoName, cb) {
 
   // Connect to the API
   request(options, function(err, response, body) {
+    console.log(response.statusCode);
     if (err) throw err;
     if (response.statusCode == 200) {
 
@@ -45,16 +50,25 @@ function downloadImageByURL(url, filePath) {
        })
        .pipe(fs.createWriteStream(filePath))
        .on('finish', function () {
-         console.log("Downloaded: " + filePath);
+         console.log(filePath + " downloaded.");
        })
 }
 
-// The call to the main function including the callback function.
-getRepoContributors("jquery", "jquery", function(err, result) {
 
-  for (user in result) {
-    filePath = "avatars/" + result[user].login + ".png" ;
-    downloadImageByURL(result[user].avatar_url, filePath);
-  }
-});
+
+if (argRepoOwner === undefined || argRepoName === undefined) {
+
+  console.log("Sacrilege, arguments are incomplete!");
+
+  } else {
+    getRepoContributors(argRepoOwner, argRepoName, function(err, result) {
+
+      for (user in result) {
+        filePath = "avatars/" + result[user].login + ".png" ;
+        downloadImageByURL(result[user].avatar_url, filePath);
+
+      }
+    }, argToken);
+}
+
 
