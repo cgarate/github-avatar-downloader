@@ -11,6 +11,9 @@ var GITHUB_USER = "cgarate";
 var args = process.argv;
 var argRepoOwner = args[2];
 var argRepoName = args[3];
+
+// Github invalidated my token while testing so I had to generate a new one and remove it from the code.
+// For now I decided to just pass it as a command line argument.
 var argToken = args[4];
 
 // The main function. Creates a request to the github API to get a list of contributors' info of a specific repository.
@@ -55,8 +58,8 @@ function downloadImageByURL(url, filePath) {
 }
 
 
-
-if (argRepoOwner === undefined || argRepoName === undefined) {
+// Make the arguments required!
+if (argRepoOwner === undefined || argRepoName === undefined || argToken === undefined) {
 
   console.log("Sacrilege, arguments are incomplete!");
 
