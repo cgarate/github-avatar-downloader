@@ -27,7 +27,6 @@ var getRepoContributors = function (repoOwner, repoName, cb) {
 
   // Connect to the API
   request(options, function(err, response, body) {
-    console.log(response.statusCode);
     if (err) throw err;
     if (response.statusCode == 200) {
 
@@ -46,6 +45,7 @@ function downloadImageByURL(url, filePath) {
 
   request.get(url)
        .on('error', function (err) {
+        console.log("Error");
          throw err;
        })
        .pipe(fs.createWriteStream(filePath))
