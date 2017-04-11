@@ -2,27 +2,29 @@
 // We need request and fs modules
 var request = require('request');
 var fs = require('fs');
+require('dotenv/config');
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 // Needed to connect to the API
-var GITHUB_USER = "cgarate";
+var GITHUB_USER = process.env.GITHUB_USER;
+var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 var args = process.argv;
 var argRepoOwner = args[2];
 var argRepoName = args[3];
 
-// Github invalidated my token while testing so I had to generate a new one and remove it from the code.
-// For now I decided to just pass it as a command line argument.
-var argToken = args[4];
+// // Github invalidated my token while testing so I had to generate a new one and remove it from the code.
+// // For now I decided to just pass it as a command line argument.
+// var argToken = args[4];
 
 // The main function. Creates a request to the github API to get a list of contributors' info of a specific repository.
-var getRepoContributors = function (repoOwner, repoName, cb, APItoken) {
+var getRepoContributors = function (repoOwner, repoName, cb) {
 
   // We need to set a custom User-Agent so we pass the options object to the request function.
   var options = {
     //url: 'https://api.github.com/repos/request/request',
-    url: `https://${GITHUB_USER}:${APItoken}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
+    url: `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
       'User-Agent': 'request'
     }
@@ -59,7 +61,7 @@ function downloadImageByURL(url, filePath) {
 
 
 // Make the arguments required!
-if (argRepoOwner === undefined || argRepoName === undefined || argToken === undefined) {
+if (argRepoOwner === undefined || argRepoName === undefined) {
 
   console.log("Sacrilege, arguments are incomplete!");
 
@@ -71,7 +73,7 @@ if (argRepoOwner === undefined || argRepoName === undefined || argToken === unde
         downloadImageByURL(result[user].avatar_url, filePath);
 
       }
-    }, argToken);
+    });
 }
 
 
